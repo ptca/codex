@@ -1,6 +1,9 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-build:
+yarn-build:
+	yarn build
+
+build: yarn-build
 	docker build -t codex:0.1.0 .
 
 compose:
