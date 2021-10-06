@@ -6,7 +6,7 @@ import { TodoItem } from "../../models/todos";
 
 const typeOrmConfig: PostgresConnectionOptions = {
   type: "postgres",
-  host: "localhost",
+  host: "postgres",
   port: 5432,
   username: "admin",
   password: "codex",

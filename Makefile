@@ -1,14 +1,16 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-all: run
+build:
+	docker build -t codex:0.1.0 .
 
-bin: 
-	docker run -it --rm \
-		-v "$(ROOT_DIR):/sb" \
-		-w "/sb" \
-		golang:1.17.1-alpine3.14 sh -c "go build -o bin/alice" .
+compose:
+	docker-compose -f ./docker/docker-compose.yml --project-directory ./ up -d
+	@sleep 3
 
-build: bin
-	docker build -t alice:0.1.0 .
+compose-down:
+	docker-compose -f ./docker/docker-compose.yml --project-directory ./ down
 
-
+init-db: 
+	CID="$(shell docker ps | grep postgres | awk '{print $$1}')"; docker exec $$CID /tmp/init-db.sh
+	
+run: build compose init-db
