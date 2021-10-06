@@ -27,7 +27,7 @@ _Note_ there is no explicit `done` endpoint. The user can use a `PUT` request to
 
 The main components are:
 
-- swagger file that defines the API
+- openAPIV3 file that defines the API (./config/api.yml)
 - controller that implements the API handlers
 - datastore interface that provides methods for the CRUD operations. I have provided an in-memory, as well as postgres implementation. The default is postgres.
 
@@ -44,3 +44,25 @@ The main components are:
   - initializing the database
 
 After calling `make run` you can interact with the API on `localhost:3000`
+
+## Examples
+
+Some example queries:
+
+### Make a ToDo
+
+```
+curl --location --request POST 'http://localhost:3000/api/v1/todos' \
+-H "Content-Type: application/json" \
+-d '{
+    "task": "Shovel the driveway"
+}'
+```
+
+### Get All ToDos
+
+```
+curl -XGET localhost:3000/api/v1/todos
+```
+
+You can refer to ./config/api.yml for the full API definition.
