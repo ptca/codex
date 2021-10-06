@@ -1,0 +1,203 @@
+openapi: "3.0.0"
+info:
+  title: "Codex todos"
+  description: "REST API for managing a todo list"
+  version: 1.0.0
+tags:
+  - name: Todo API
+servers:
+  - url: /api/v1
+
+paths:
+  /todos:
+    get:
+      summary: Retrieve all TodoItems
+      tags:
+        - TodoService
+      operationId: getTodos
+      responses:
+        200:
+          description: "Successfully retrieved all TodoItems"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoItemList"
+        404:
+          description: "No TodoItems have been created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: "Unexpected error processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: "Create a new TodoItem"
+      tags:
+        - TodoService
+      operationId: createTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoItem"
+      responses:
+        201:
+          description: "Successfully created a new TodoItem"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoItem"
+        400:
+          description: "Invalid payload provided"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: "Unexpected error processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /todos/{todoID}:
+    parameters:
+      - name: todoID
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Retrieve a TodoItem by ID
+      tags:
+        - TodoService
+      operationId: getTodo
+      responses:
+        200:
+          description: "Successfully retrieved TodoItem"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoItem"
+        404:
+          description: "Requested TodoItem does not exist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: "Unexpected error processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: "Update a TodoItem"
+      tags:
+        - TodoService
+      operationId: updateTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoItem"
+      responses:
+        200:
+          description: "Successfully updated TodoItem"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoItem"
+        400:
+          description: "Invalid payload provided"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: "Requested TodoItem does not exist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: "Unexpected error processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: "Delete a TodoItem"
+      tags:
+        - TodoService
+      operationId: deleteTodo
+      responses:
+        200:
+          description: "Successfully deleted TodoItem"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoItem"
+        404:
+          description: "Requested TodoItem does not exist"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: "Unexpected error processing request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Error:
+      description: Error containing a code and message
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: "TodoItem not found"
+
+    TodoItem:
+      description: Todo Item
+      type: object
+      required:
+        - task
+      properties:
+        task:
+          type: string
+          example: "Shovel the driveway"
+        done:
+          type: boolean
+          example: false
+          default: false
+        id:
+          type: number
+          example: 0
+
+    TodoItemList:
+      description: Todo Item
+      type: object
+      required:
+        - todos
+      properties:
+        todos:
+          type: array
+          items:
+            $ref: "#/components/schemas/TodoItem"
