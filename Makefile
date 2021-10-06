@@ -1,6 +1,7 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 yarn-build:
+	yarn
 	yarn build
 
 build: yarn-build
